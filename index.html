@@ -25,14 +25,8 @@
 		$(document).ready(function(){
 			$.each($data, function($key, $value){
 				var $audio = new Audio();
-				$($audio).append($("<source />").attr({
-					"src"  : "audio/" + $key + ".ogg",
-					"type" : "audio/ogg"
-				}));
-				$($audio).append($("<source />").attr({
-					"src"  : "audio/" + $key + ".mp3",
-					"type" : "audio/mpeg"
-				}));
+				$($audio).append(buildSource($key, "mp3"));
+				$($audio).append(buildSource($key, "ogg"));
 				$("body").append($audio);
 				
 				$($audio).bind("canplaythrough", function(){
@@ -45,6 +39,12 @@
 				});
 			});
 		});
+		
+		// Input $n:number $f:filetype
+		function buildSource($n, $f) {
+			var $t = $f == "ogg" ? "ogg" : "mpeg";
+			return $("<source />").attr({src:"audio/"+$n+"."+$f, type:"audio/"+$t});
+		}
 	</script>
 	<style type="text/css">
 		body {
