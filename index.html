@@ -5,11 +5,16 @@
 	<script src="zepto.min.js"></script>
 	<script>
 		$(document).ready(function(){
-			$("li").bind("click", function(event){
-				var $audio = document.getElementById("audio" + $(event.target).attr("audio"));
-				$audio.currentTime = 0;
-				$audio.play();
-	    	});
+			$sb = $("#soundboard");
+			$("audio").each(function(){
+				var $li = $('<li />').html($(this).attr("text"));
+				var $audio = this;
+				$li.bind("click", function(event){
+					$audio.currentTime = 0;
+					$audio.play();
+				});
+				$sb.append($li);
+			});
 		});
 	</script>
 	<style type="text/css">
@@ -39,17 +44,30 @@
 	</style>
 </head>
 <body>
-	<audio id="audio01" preload="auto">
+	<audio preload="auto" text="Packers Won The Super Bowl">
 		<source src = "audio/01.ogg"  type="audio/ogg" />
 		<source src = "audio/01.mp3"  type="audio/mpeg" />
 	</audio>
-	<audio id="audio02" preload="auto">
+	<audio preload="auto" text="Packers Whoo!">
 		<source src = "audio/02.ogg"  type="audio/ogg" />
 		<source src = "audio/02.mp3"  type="audio/mpeg" />
+	</audio>
+	<audio preload="auto" text="Packers! Packers!">
+		<source src = "audio/03.ogg"  type="audio/ogg" />
+		<source src = "audio/03.mp3"  type="audio/mpeg" />
+	</audio>
+	<audio preload="auto" text="Yeah, Packers Won.">
+		<source src = "audio/04.ogg"  type="audio/ogg" />
+		<source src = "audio/04.mp3"  type="audio/mpeg" />
 	</audio>	
-	<ul>
-		<li audio="01">Packers Won The Super Bowl</li>
-		<li audio="02">Packers Whoo!</li>
-	</ul>
+	<audio preload="auto" text="Please, if y'all just go back to your drinkin'">
+		<source src = "audio/05.ogg"  type="audio/ogg" />
+		<source src = "audio/05.mp3"  type="audio/mpeg" />
+	</audio>	
+	<audio preload="auto" text="Go Packers">
+		<source src = "audio/06.ogg"  type="audio/ogg" />
+		<source src = "audio/06.mp3"  type="audio/mpeg" />
+	</audio>		
+	<ul id="soundboard" />
 </body>
 </html>
