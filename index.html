@@ -4,16 +4,45 @@
 	<title>PACKERS!</title>
 	<script src="zepto.min.js"></script>
 	<script>
+		var $data = new Object();
+		$data["01"] = "Packers Won The Super Bowl! Packers! Whoo!";
+		$data["02"] = "Packers Whoo!";
+		$data["03"] = "Packers! Packers!";
+		$data["04"] = "Yeah, Packers Won.";
+		$data["05"] = "Please, if y'all just go back to your drinkin'";
+		$data["06"] = "Go Packers!";
+		$data["07"] = "Packers Won The Super Bowl! Whoo!";
+		$data["08"] = "Packers! Packers! Packers Won The Super Bowl";
+		$data["09"] = "Packer, Packer?";
+		$data["10"] = "Yeah, Packers!";
+		$data["11"] = "Packers Packers";
+		$data["12"] = "Packers Whoo!";
+		$data["13"] = "Packers.";
+		$data["14"] = "Packers?";
+		$data["15"] = "Dedicated to the Memory of 'Crazylegs' Elroy Hirsch.";
+		$data["16"] = "Go Packers.";
+
 		$(document).ready(function(){
-			$sb = $("#soundboard");
-			$("audio").each(function(){
-				var $li = $('<li />').html($(this).attr("text"));
-				var $audio = this;
-				$li.bind("click", function(event){
-					$audio.currentTime = 0;
-					$audio.play();
+			$.each($data, function($key, $value){
+				var $audio = new Audio();
+				$($audio).append($("<source />").attr({
+					"src"  : "audio/" + $key + ".ogg",
+					"type" : "audio/ogg"
+				}));
+				$($audio).append($("<source />").attr({
+					"src"  : "audio/" + $key + ".mp3",
+					"type" : "audio/mpeg"
+				}));
+				$("body").append($audio);
+				
+				$($audio).bind("canplaythrough", function(){
+					$("#soundboard").append(
+						 $("<li />").html($value).bind("click", function(event){
+							$audio.currentTime = 0;
+							$audio.play();
+						})
+					)
 				});
-				$sb.append($li);
 			});
 		});
 	</script>
@@ -43,31 +72,7 @@
 		}
 	</style>
 </head>
-<body>
-	<audio preload="auto" text="Packers Won The Super Bowl">
-		<source src = "audio/01.ogg"  type="audio/ogg" />
-		<source src = "audio/01.mp3"  type="audio/mpeg" />
-	</audio>
-	<audio preload="auto" text="Packers Whoo!">
-		<source src = "audio/02.ogg"  type="audio/ogg" />
-		<source src = "audio/02.mp3"  type="audio/mpeg" />
-	</audio>
-	<audio preload="auto" text="Packers! Packers!">
-		<source src = "audio/03.ogg"  type="audio/ogg" />
-		<source src = "audio/03.mp3"  type="audio/mpeg" />
-	</audio>
-	<audio preload="auto" text="Yeah, Packers Won.">
-		<source src = "audio/04.ogg"  type="audio/ogg" />
-		<source src = "audio/04.mp3"  type="audio/mpeg" />
-	</audio>	
-	<audio preload="auto" text="Please, if y'all just go back to your drinkin'">
-		<source src = "audio/05.ogg"  type="audio/ogg" />
-		<source src = "audio/05.mp3"  type="audio/mpeg" />
-	</audio>	
-	<audio preload="auto" text="Go Packers">
-		<source src = "audio/06.ogg"  type="audio/ogg" />
-		<source src = "audio/06.mp3"  type="audio/mpeg" />
-	</audio>		
+<body>	
 	<ul id="soundboard" />
 </body>
 </html>
