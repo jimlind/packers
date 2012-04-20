@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>PACKERS!</title>
+	<link href='http://fonts.googleapis.com/css?family=Averia+Serif+Libre:700' rel='stylesheet' type='text/css'>
 	<script src="zepto.min.js"></script>
 	<script>
 		var $data = new Object();
@@ -47,22 +48,28 @@
 		}
 	</script>
 	<style type="text/css">
-		body {
+		html, body {
+			height:100%;
 			margin:0;
+			overflow: hidden;
 			padding:0;
+			width:100%;
 		}
 		ul {
 			display:block;
 			margin:0;
 			overflow:hidden;
 			padding:0;
+			position:absolute;
+			padding:bottom:200px;
 		}
 		li {
-			background:#88b7d5;
-			border:4px solid #c2e1f5;
+			background:#294239;
+			border:4px solid #ffbf00;
+			color:#ffffff;
 			cursor:pointer;
 			display:block;
-			font-family:sans-serif;
+			font-family:'Averia Serif Libre', serif;
 			font-size:24px;
 			float:left;
 			margin:5px;
@@ -70,9 +77,25 @@
 			text-align:right;
 			width:150px;
 		}
+		#footer {
+			background: url('images/SeatEmpty.jpg') center center;
+			position:absolute;
+				bottom:0;
+			width:100%;
+		}
+		#footer img {
+			display:block;
+			margin:0px auto;
+			max-width:567px;			
+			width:100%;
+			
+		}
 	</style>
 </head>
-<body>	
+<body>
+	<div id="footer">
+		<img src="images/SeatsFilled.jpg">
+	</div>
 	<ul id="soundboard" />
 </body>
 </html>
