@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>PACKERS!</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 	<script src="zepto.min.js"></script>
 	<script>
 		var $data = new Object();
@@ -21,30 +22,80 @@
 		$data["14"] = "Packers?";
 		$data["15"] = "Dedicated to the Memory of 'Crazylegs' Elroy Hirsch.";
 		$data["16"] = "Go Packers.";
+		$total = 16;
 
-		$(document).ready(function(){
+		Zepto(function(){
 			$.each($data, function($key, $value){
 				var $audio = new Audio();
-				$($audio).append(buildSource($key, "mp3"));
-				$($audio).append(buildSource($key, "ogg"));
+				$($audio).append(jAudio($key, "mp3")).append(jAudio($key, "ogg"));
 				$("body").append($audio);
-				
-				$($audio).bind("canplaythrough", function(){
-					$("#soundboard").append(
-						 $("<li />").html($value).bind("click", function(event){
-							$audio.currentTime = 0;
-							$audio.play();
-						})
-					)
-				});
+				$("#soundboard").append(
+					$("<li />").html($value).bind("click", function(){
+						$audio.play();
+						$audio.currentTime = 0;
+					})
+				);
+				if($("li").length == $total) jRender();
 			});
+			$("body").bind("orientationchange", jRender); //orientation change
+			$(window).bind("load", jRender);			  //font load
 		});
 		
 		// Input $n:number $f:filetype
-		function buildSource($n, $f) {
+		function jAudio($n, $f) {
 			var $t = $f == "ogg" ? "ogg" : "mpeg";
 			return $("<source />").attr({src:"audio/"+$n+"."+$f, type:"audio/"+$t});
 		}
+		
+		function jRender() {
+			var $width = $(window).width();
+			$("body").width($width); //iOS expands width on orientation change
+			var $orientation = "wide"
+			var $columns = 4;
+			var $size = 4;
+			if ($width < 500) {
+				if (typeof(orientation) != "undefined" &&  orientation % 180 == 0) {
+					$columns = 2;
+					$size = 3;
+					$("li").css('font-size', '16px');
+				} else {
+					$columns = 3;
+					$size = 2;
+					$("li").css('font-size', '10px');
+				}
+			}
+			$("li").css({
+				borderWidth: $size+"px",
+				margin: $size+"px",
+				padding: ($size * 2)+"px",
+				width: ($width/$columns - ($size * 8))+"px"
+			});
+			jFlow($columns, $size);
+		}
+		
+		function jFlow($columns, $size) {
+			if ($columns == 4){
+				$("li").css({position: 'relative', top: 0, left: 0});
+				return false;
+			}
+			var $map = new Array;
+			var $items = $("li");
+			$("li").each(function($index){
+				if ($index < $columns) {
+					$map.push($(this).offset());
+				} else {
+					var $i = 0;
+					for ($j = 1; $j < $map.length; $j++) {
+						if ($map[$i]["top"] + $map[$i]["height"] > $map[$j]["top"] + $map[$j]["height"]) {
+							$i = $j;
+						}
+					}
+					$(this).css({position: "absolute", top: ($map[$i]["top"] + $map[$i]["height"]) + "px", left: $map[$i]["left"] - $size + "px"});
+					$map.splice($i, 1, $(this).offset());
+				}
+			});
+		}
+			
 	</script>
 	<style type="text/css">
 		@font-face {
@@ -52,23 +103,16 @@
 			src: url('font.ttf');
 			/* http://www.google.com/webfonts/specimen/Averia+Serif+Libre */
 		}
-		
 		html, body {
-			height:100%;
 			margin:0;
-			overflow: hidden;
 			padding:0;
-			width:100%;
 		}
-		ul {
-			display:block;
+		#soundboard {
 			margin:0;
-			overflow:hidden;
 			padding:0;
-			position:absolute;
-			padding:bottom:200px;
 		}
 		li {
+			display:none;
 			background:#294239;
 			border:4px solid #ffbf00;
 			color:#ffffff;
@@ -82,25 +126,9 @@
 			text-align:right;
 			width:150px;
 		}
-		#footer {
-			background: url('images/SeatEmpty.jpg') center center;
-			position:absolute;
-				bottom:0;
-			width:100%;
-		}
-		#footer img {
-			display:block;
-			margin:0px auto;
-			max-width:567px;			
-			width:100%;
-			
-		}
 	</style>
 </head>
 <body>
-	<div id="footer">
-		<img src="images/SeatsFilled.jpg">
-	</div>
-	<ul id="soundboard" />
+	<ul id="soundboard"></ul>
 </body>
 </html>
