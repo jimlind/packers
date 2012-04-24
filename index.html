@@ -32,13 +32,13 @@
 				$("#soundboard").append(
 					$("<li />").html($value).bind("click", function(){
 						$audio.play();
-						$audio.currentTime = 0;
 					})
 				);
 				if($("li").length == $total) jRender();
 			});
 			$("body").bind("orientationchange", jRender); //orientation change
 			$(window).bind("load", jRender);			  //font load
+			$(window).bind("resize", jRender);			  //font load
 		});
 		
 		// Input $n:number $f:filetype
@@ -70,14 +70,15 @@
 				padding: ($size * 2)+"px",
 				width: ($width/$columns - ($size * 8))+"px"
 			});
-			jFlow($columns, $size);
+			if($columns == 4) {
+				jSize();
+			} else {
+				jFlow($columns, $size);
+			}
+			
 		}
 		
 		function jFlow($columns, $size) {
-			if ($columns == 4){
-				$("li").css({position: 'relative', top: 0, left: 0});
-				return false;
-			}
 			var $map = new Array;
 			var $items = $("li");
 			$("li").each(function($index){
@@ -94,6 +95,36 @@
 					$map.splice($i, 1, $(this).offset());
 				}
 			});
+		}
+		
+		function jSize() {
+			var $height = $(window).height();
+			var $li = $("li");
+			$li.css("height", ($height/4 - 32)+"px"); 
+			
+			var $first = $li.first();
+			$first.css("font-size", 1);
+			var $height = $first.attr("scrollHeight");
+			var $width = $first.attr("scrollWidth");
+			$first.css("font-size", '');
+			
+			$("li").each(function($index){
+				var $this = $(this).css("overflow", "auto");
+				var $adjust = ($this.attr("scrollHeight") <= $height && $this.attr("scrollWidth") <= $width) ? 1 : -1;
+				var $size = parseFloat($this.css("font-size"));
+				if ($adjust === 1) {
+					while ($this.attr("scrollHeight") <= $height && $this.attr("scrollWidth") <= $width) {
+						$this.css("font-size", $size += $adjust);
+					}
+				} else {
+					while ($this.attr("scrollHeight") > $height || $this.attr("scrollWidth") > $width) {
+						$this.css("font-size", $size += $adjust);
+					}
+				}
+				$this.css("font-size", $size - 2);
+				$(this).css("overflow", "hidden");
+			});
+			
 		}
 			
 	</script>
@@ -124,7 +155,6 @@
 			margin:5px;
 			padding:10px;
 			text-align:right;
-			width:150px;
 		}
 	</style>
 </head>
