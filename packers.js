@@ -1,3 +1,6 @@
+/* EASY ONLINE UGLIFICATION           */
+/* http://marijnhaverbeke.nl/uglifyjs */
+
 var $data = new Object();
 $data["01"] = "Packers Won The Super Bowl! Packers! Whoo!";
 $data["02"] = "Packers Whoo!";
