@@ -86,6 +86,7 @@
 			var $items = $("li");
 			$("li").each(function($index){
 				if ($index < $columns) {
+					$(this).css({position: "relative", top: "", left: ""});
 					$map.push($(this).offset());
 				} else {
 					var $i = 0;
