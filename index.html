@@ -31,6 +31,9 @@
 				$("body").append($audio);
 				$("#soundboard").append(
 					$("<li />").html($value).bind("click", function(){
+						if($audio.paused == false) {
+							$audio.currentTime = 0.01;
+						}
 						$audio.play();
 					})
 				);
